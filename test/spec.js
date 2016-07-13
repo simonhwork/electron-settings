@@ -19,13 +19,21 @@ let tmpFileName = tmp.tmpNameSync({
 });
 
 let tmpSettings = new ElectronSettings({
-  dir: tmpDir
-  // file: 'test'
+  dir: tmpDir,
+  filename: 'test2.json',
+  prettify: true,
+  defaults: {
+    foo: 'bar',
+    snap: 'crackle'
+  }
 });
 
 describe('', () => {
   it('', done => {
-    tmpSettings.watch('foo.bar');
-    done();
+    // tmpSettings.set('.', {
+    //   foo: 'baz'
+    // }).then(() => {
+    //   done();
+    // });
   });
 });

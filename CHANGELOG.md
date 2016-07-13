@@ -14,6 +14,7 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 * Adds `spaces` option to specify the number of spaces to use when prettifying the outputted JSON.
 * Adds `ext` option to specify a custom file extension.
 * Adds `default` option to specify setting defaults if the config file does not exist.
+* Adds `saveImmediately` option to `set()`, `unset()`, `clear()`, and `defaults()` to save the file without a debounce delay.
 * Updates saving to disk so that it is now asynchronous.
 * Replaces local key path helpers library Atom's official key-path-helpers package.
 * Removes Lodash as a dependency.
@@ -21,9 +22,12 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 ⚠️ **Breaking Changes**
 * Changes `configFileDir` option to `dir`
 * Changes `configFileName` option to `filename`
-* Changes default settings directory from `/<user data>/electron-settings/settings.json` to `/<user data>/config/settings.json`
-* Removes support for key path watchers and associative
- methods.
+* Changes default settings directory from `<user data>/electron-settings` to `<user data>/config`
+* Removes support for key path watchers and deprecates the following methods:
+  * `watch()`
+  * `unWatch()`
+  * `getWatchers()`
+  * `clearWatchers()`
 
 1.1.1 - Jul. 12, 2016
 ---------------------
