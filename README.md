@@ -88,14 +88,14 @@ ISC
 
 ***
 
-<small>Last updated Jul. 14th, 2016, by [Nathan Buchar]</small>
+<small>:two_hearts:</small>
 
 
 
 [Nathan Buchar]: (mailto:hello@nathanbuchar.com)
 
-[docs_events]: ./docs/api/events.md
-[docs_methods]: ./docs/api/methods.md
+[docs_events]: ./docs/events.md
+[docs_methods]: ./docs/methods.md
 
 [event_save]: #event-save
 [event_change]: #event-change
