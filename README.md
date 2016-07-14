@@ -14,20 +14,13 @@ Migrating from v1? [Click me]().
 ***
 
 
-How It Works
-------------
 
-Electron doesn't have a built-in system for managing persistent user settings for your application. Bummer. This package attempts to bridge that gap.
+Install
+-------
 
-With electron-settings, you aren't actually communicating directly with the file system. Instead, you're interacting with a local copy of the settings object that's stored in memory. Any time this cache is modified, a save request is issued internally which will then save the current state of the settings cache to the disk in the background. This behavior allows you to read and write settings asynchronously and *much* faster than you would if you were interacting directly with the file system.
-
-By default, these save requests are debounced by 100ms. This means that once a change is made to the settings object, electron-settings will wait one-tenth of a second before saving to the disk. This ensures that save requests will not queue unnecessarily and that we are not reading and writing more than we need to.
-
-Interacting with a local copy of the settings object instead of the file system means that not only will your app run faster but you can also read and write settings *synchronously*!
-
-**Just be sure to check that the app can quit safely before quitting** – otherwise data waiting to be saved may be lost.
-
-
+```
+$ npm install electron-settings
+```
 
 Quick Start
 -----------
@@ -43,6 +36,22 @@ settings.set('user', {
 settings.get('user.lastName');
 // => "Vandelay"
 ```
+
+And don't forget to [quit safely!][section_quitting-safely]
+
+
+How It Works
+------------
+
+Electron doesn't have a built-in system for managing persistent user settings for your application. Bummer. This package attempts to bridge that gap using an adapation of [Atom's own configuration manager](https://github.com/atom/atom/blob/master/src/config.coffee) – but it's come pretty far since then.
+
+With electron-settings, you will not actually interact directly with the file system. Instead, you're working with a local copy of the settings object that's stored in memory instead of on the disk. Any time this cache is modified, a save request is issued internally which will then save the current state of the settings cache to the file system in the background. This behavior allows you to read and write settings asynchronously and *much* faster than you would reading from and writing to the file directly.
+
+Save requests are debounced by 100ms, which means that once a change is made to the settings object electron-settings will wait one-tenth of a second before saving to the disk. This ensures that save requests will not queue unnecessarily and that we are not reading and writing more than we need to.
+
+Interacting with a local copy of the settings object instead of the file system means that not only will your app run faster but you can also read and write settings *synchronously*!
+
+**Just be sure to check that the app can quit safely before quitting** – otherwise data waiting to be saved may be lost.
 
 
 Quitting Safely
@@ -88,7 +97,7 @@ ISC
 
 ***
 
-<small>:two_hearts:</small>
+:two_hearts:
 
 
 
@@ -97,16 +106,4 @@ ISC
 [docs_events]: ./docs/events.md
 [docs_methods]: ./docs/methods.md
 
-[event_save]: #event-save
-[event_change]: #event-change
-[event_error]: #event-error
-[event_canQuitSafely]: #event-can-quit-safely
-
-[method_has]: #has
-[method_get]: #get
-[method_set]: #set
-[method_unset]: #unset
-[method_clear]: #clear
-[method_defaults]: #defaults
-[method_canQuitSafely]: #canquitsafely
-[method_getPathToConfigFile]: #getpathtoconfigfile
+[section_quitting-safely]: #quitting-safely
