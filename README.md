@@ -1,71 +1,112 @@
-ElectronSettings
-================
+electron-settings 
+==================
 
-Save settings to a disk and load them in when your app starts. A user settings manager for Electron, adapted from [Atom/config](https://github.com/atom/atom/blob/master/src/config.coffee).
+A fast and powerful persistent user settings manager for [Electron](https://electron.atom.io), adapted from [Atom's own configuration manager](https://github.com/atom/atom/blob/master/src/config.coffee).
 
-**Requires Electron 0.35.0 or above.**
+Having trouble? [Check the troubleshooting guide]()!
+
+Migrating from v1? [Click me]().
+
+[![Join the chat at https://gitter.im/nathanbuchar/electron-settings](https://badges.gitter.im/nathanbuchar/electron-settings.svg)](https://gitter.im/nathanbuchar/electron-settings?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 
 
 
 ***
 
 
+How It Works
+------------
 
-Usage
------
+Electron doesn't have a built-in system for managing persistent user settings for your application. Bummer. This package attempts to bridge that gap.
 
-**`new ElectronSettings([options])`**
+With electron-settings, you aren't actually communicating directly with the file system. Instead, you're interacting with a local copy of the settings object that's stored in memory. Any time this cache is modified, a save request is issued internally which will then save the current state of the settings cache to the disk in the background. This behavior allows you to read and write settings asynchronously and *much* faster than you would if you were interacting directly with the file system.
 
-**Arguments**
+By default, these save requests are debounced by 100ms. This means that once a change is made to the settings object, electron-settings will wait one-tenth of a second before saving to the disk. This ensures that save requests will not queue unnecessarily and that we are not reading and writing more than we need to.
 
-* **`options`** *(Object)* - Custom options for this `ElectronSettings` instance.
+Interacting with a local copy of the settings object instead of the file system means that not only will your app run faster but you can also read and write settings *synchronously*!
 
-  * `options.configDirPath` *(string)* - Absolute path to the directory where you'd like to save your settings.json file. By default this is in your user data directory. See `app.getPath('userData')`.
-
-  * `options.configFileName` *(string)* - The file name for your settings file. By default this is `settings`. Omit the `.json` extension.
-
-  * `options.debouncedSaveTime` *(number)* - The maximum amount of time in milliseconds that must elapse before saving to disk. Default `100`
+**Just be sure to check that the app can quit safely before quitting** – otherwise data waiting to be saved may be lost.
 
 
-**Example**
 
-To use `electron-settings`, first import the class, then create a new `electron-settings` instance:
+Quick Start
+-----------
 
 ```js
-const ElectronSettings = require('electron-settings');
+const settings = require('electron-settings');
 
-let settings = new ElectronSettings();
+settings.set('user', {
+  firstName: 'Art',
+  lastName: 'Vandelay'
+});
 
-console.log(settings.getConfigFilePath());
-// => /Users/Nathan/Library/Application Support/Electron/electron-settings/settings.json
+settings.get('user.lastName');
+// => "Vandelay"
 ```
 
-This will automatically generate a settings.json file in your user data directory if one does not exist. If the file already exists, it will be imported.
 
+Quitting Safely
+---------------
 
-***
+Part of what makes electron-settings fast is its caching layer and lazy interaction with the file system, but as a result special precautions need to be taken to ensure that data is not corrupted or lost if the app quits in the middle of a save or before a queued save request has been fulfilled.
 
+When the app will quit, ensure that it can in fact quit safely by using the `canQuitSafely` method and the `'can-quit-safely'` event handler.
+
+```js
+// When the app is about to quit, check that we can quit
+// the app safely without losing any data. If we cannot,
+// prevent the app from quitting, wait for the next
+// "can-quit-safely" event, then quit the app.
+app.on('will-quit', event => {
+  if (!settings.canQuitSafely()) {
+    event.preventDefault();
+
+    settings.once('can-quit-safely', () => {
+      app.quit();
+    });
+  }
+});
+```
 
 Documentation
 -------------
-
-* [Methods][docs_methods]
 * [Events][docs_events]
-* *More coming soon*
+* [Methods][docs_methods]
 
 
 Contributors
 -------
-* [Nathan Buchar](mailto:hello@nathanbuchar.com)
+* [Nathan Buchar] (Owner)
 * [Kai Eichinger](mailto:kai.eichinger@outlook.com)
+* *You?*
 
 
 License
 -------
-MIT
+ISC
+
+
+***
+
+<small>Last updated Jul. 14th, 2016, by [Nathan Buchar]</small>
 
 
 
+[Nathan Buchar]: (mailto:hello@nathanbuchar.com)
 
-[docs_methods]: ./docs/api/methods.md
 [docs_events]: ./docs/api/events.md
+[docs_methods]: ./docs/api/methods.md
+
+[event_save]: #event-save
+[event_change]: #event-change
+[event_error]: #event-error
+[event_canQuitSafely]: #event-can-quit-safely
+
+[method_has]: #has
+[method_get]: #get
+[method_set]: #set
+[method_unset]: #unset
+[method_clear]: #clear
+[method_defaults]: #defaults
+[method_canQuitSafely]: #canquitsafely
+[method_getPathToConfigFile]: #getpathtoconfigfile

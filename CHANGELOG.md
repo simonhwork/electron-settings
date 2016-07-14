@@ -10,21 +10,21 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 * Adds `has()` method to check if a key exists.
 * Adds `defaults()` method to apply defaults to settings.
 * Adds `canQuitSafely()` method to check if it is safe to quit the application.
-* Adds `prettify` option to specify whether or not the outputted JSON should be formatted.
-* Adds `spaces` option to specify the number of spaces to use when prettifying the outputted JSON.
-* Adds `ext` option to specify a custom file extension.
-* Adds `default` option to specify setting defaults if the config file does not exist.
 * Adds `saveImmediately` option to `set()`, `unset()`, `clear()`, and `defaults()` to save the file without a debounce delay.
 * Adds `FSWatcher` support for file change events using the `change` listener.
-* Adds `canQuitSafely` event.
+* Adds `can-quite-safely` event.
+* Adds automatic migration from v1 to v2 for most users.
+* Adds troubleshooting guide.
+* Adds migration guide.
+* Replaces `getConfigFilePath()` with `getPathToSettingsFile()`.
 * Removes the `created` event as there is no way to listen for this event because the event is only called during instantiation before a reference to the instance can be obtained.
 * Updates saving to disk so that it is now asynchronous.
 * Replaces local key path helpers library Atom's official key-path-helpers package.
 * Removes Lodash as a dependency.
 
 ⚠️ **Breaking Changes**
-* Changes `configFileDir` option to `dir`
-* Changes `configFileName` option to `filename`
+* electron-settings no longer needs to be instantiated
+* Instance options have been removed
 * Changes default settings directory from `<user data>/electron-settings` to `<user data>/config`
 * The `change` event is now invoked on file change events signaled by an `FSWatcher` and has no relation to key path watching.
 * Removes support for key path watchers and deprecates the following methods:
