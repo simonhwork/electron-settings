@@ -30,9 +30,8 @@ Checks if the key path exists within the settings object. Will return `true` if 
 
   * **`keyPath`** *String* - The path to the key that we wish to check exists within the settings object.
 
-**Example**
+**Examples**
 
-Given
 ```json
 {
   "foo": {
@@ -70,7 +69,6 @@ Returns the value of the key at the chosen key path. If no key path is provided,
 
 **Examples**
 
-Given
 ```json
 {
   "foo": {
@@ -114,7 +112,6 @@ Sets the value of the key at the chosen key path. If no key path is provided, th
 
 **Examples**
 
-Given
 ```json
 {}
 ```
@@ -155,7 +152,6 @@ Clears the entire settings object. Careful :raised_hands:
 
 **Example**
 
-Given
 ```json
 {
   "foo": {
@@ -192,7 +188,6 @@ Deletes the key and value at the chosen key path. Note that unsetting a key path
 
 **Example**
 
-Given
 ```json
 {
   "foo": {
@@ -226,14 +221,13 @@ Watches a key path and calls the handler function when it is changed. You may us
   * **`handler`** *Function* - The function to call when the observed key path has changed. Returns:
     * `event` *String* - The type of change that has occured. Either `"create"`, `"change"`, or `"delete"`
     * `keyPath` *String* - The key path that was changed.
-    * `value` *Any* - The new value of this setting, if applicable.
+    * `newValue` *Any* - The new value of this setting, if applicable.
 
 **Examples**
 
-Given
 ```json
   {
-    foo: 'bar'
+    "foo": "bar"
   }
 ```
 
