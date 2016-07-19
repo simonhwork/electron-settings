@@ -213,7 +213,7 @@ watch()
 
 **`settings.watch(keyPath, handler)`**
 
-Watches a key path and calls the handler function when it is changed. You may user [minimatch](external_package_minimatch) to watch dynamic key paths, like `"foo.*"`.
+Watches a key path and calls the handler function when it is changed. You may user [minimatch][external_package_minimatch] to watch dynamic key paths, like `"foo.*"`.
 
 **Arguments**
 
