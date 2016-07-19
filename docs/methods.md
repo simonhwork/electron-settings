@@ -8,24 +8,31 @@ Methods
 * [`has()`][method_has]
 * [`get()`][method_get]
 * [`set()`][method_set]
-* [`delete()`][method_delete]
-* [`defaults()`][method_defaults]
-* [`getPathToConfigFile()`][method_getPathToConfigFile]
-* [`canQuitSafely()`][method_canQuitSafely]
+* [`unset()`][method_unset]
+* [`clear()`][method_clear]
+* [`watch()`][method_watch]
+* [`unwatch()`][method_unwatch]
+* [`getConfigFilePath()`][method_getconfigfilepath]
 
 
 
 ***
 
 
+has()
+-----
 
-### `settings.has(keyPath)`
+**`settings.has(keyPath):bool`**
 
-* **`keyPath`** *String* - The path to the key that we wish to check exists within the settings object.
+Checks if the key path exists within the settings object. Will return `true` if it exists, or `false` if it doesn't. Pretty simple :thumbsup:
 
-Checks if the key path exists within the settings object. Will return `true` if it exists, or `false` if it doesn't. Take the following for example:
+**Arguments**
 
-**settings.json**
+  * **`keyPath`** *String* - The path to the key that we wish to check exists within the settings object.
+
+**Example**
+
+Given
 ```json
 {
   "foo": {
@@ -34,28 +41,36 @@ Checks if the key path exists within the settings object. Will return `true` if 
 }
 ```
 
-**main.js**
+Check if `"foo.bar"` exists.
 ```js
 settings.has('foo.bar');
 // => true
+```
 
+Check if `"grizzknuckle"` exists.
+```js
 settings.has('grizzknuckle');
 // => false
 ```
 
-We can see that `'foo.bar'` exists, whereas `'girzzknuckle'` does not.
-
 
 ***
 
 
-### `settings.get([keyPath])`
+get()
+-----
 
-* **`keyPath`** *String* (optional) - The path to the key that we wish to get the value of.
+**`settings.get([keyPath]):any`**
 
-Returns the value of the key at the chosen key path. If the value at the chosen key path is an object or array, a copy will be returned instead of a direct reference. If no key path is specified, this will return the entire settings object instead. Take the following for example:
+Returns the value of the key at the chosen key path. If no key path is provided, this will instead return a copy of the entire settings cache.
 
-**settings.json**
+**Arguments**
+
+  * **`keyPath`** *String* (optional) - The path to the key that we wish to get the value of.
+
+**Examples**
+
+Given
 ```json
 {
   "foo": {
@@ -64,30 +79,42 @@ Returns the value of the key at the chosen key path. If the value at the chosen 
 }
 ```
 
-**main.js**
+Get all settings.
 ```js
 settings.get();
 // => { foo: { bar: 'baz' } }
+```
 
+Get the value at `"foo.bar"`.
+```js
 settings.get('foo.bar');
 // => 'baz'
 ```
 
-We can see that when the key path is not specified, the entire settings object is returned. However, if a key path is chosen, we get the value of that key, provided it exists.
-
+Get the value at `"grizzknuckle"`.
+```js
+settings.get('grizzknuckle');
+// => undefined
+```
 
 ***
 
 
-### `settings.set(keyPath, value[, callback])`
+set()
+-----
 
-* **`keyPath`** *String* - The path to the key whose value we wish to set. This key need not already exist.
-* **`value`** *Any* - The value to set the key and the chosen key path to.
-* **`callback`** *Function* (optional) - Invoked when the settings cache containing these changes have been saved to disk.
+**`settings.set([keyPath, ]value)`**
 
-Sets the value of the key at the chosen key path. If no key path is specified, this will set the value of the entire settings object instead, but `value` must be an object. Take a look at the following example:
+Sets the value of the key at the chosen key path. If no key path is provided, this will set the value of the entire settings object instead, but `value` must be an object.
 
-**settings.json**
+**Arguments**
+
+  * **`keyPath`** *String* (optional) - The path to the key whose value we wish to set. This key need not already exist.
+  * **`value`** *Any* - The value to set the key and the chosen key path to.
+
+**Examples**
+
+Given
 ```json
 {}
 ```
@@ -106,25 +133,29 @@ settings.get('user.name.first');
 Set the value of the entire settings object.
 ```js
 settings.set({
-  foo: 'bar'
+  annyong: {
+    annyong: 'annyong'
+  }
 });
 
 settings.get();
-// => { foo: 'bar' }
+// => { annyong: { annyong: 'annyong' } }
 ```
 
 
 ***
 
 
-### `settings.delete(keyPath[, callback])`
+clear()
+-------
 
-* **`keyPath`** *String* - The path to the key we wish to delete.
-* **`callback`** *Function* (optional) - Invoked when the settings cache containing these changes have been saved to disk.
+`settings.clear()`
 
-Deletes the key and value at the chosen key path. Take the following for example:
+Clears the entire settings object. Careful :raised_hands:
 
-**settings.json**
+**Example**
+
+Given
 ```json
 {
   "foo": {
@@ -133,106 +164,138 @@ Deletes the key and value at the chosen key path. Take the following for example
 }
 ```
 
-**main.js**
+Clear all settings.
 ```js
-settings.delete('foo.bar');
+settings.get();
+// => { foo: { bar: 'baz' } }
+
+settings.clear();
+
+settings.get();
+// => {}
+```
+
+
+***
+
+
+unset()
+-------
+
+`settings.unset(keyPath)`
+
+Deletes the key and value at the chosen key path. Note that unsetting a key path does not set it's value to `null` – it removes both the value *and* the key.
+
+**Arguments**
+
+  * **`keyPath`** *String* - The path to the key we wish to unset.
+
+**Example**
+
+Given
+```json
+{
+  "foo": {
+    "bar": "baz"
+  }
+}
+```
+
+Delete `"foo.bar"`.
+```js
+settings.unset('foo.bar');
 
 settings.get('foo');
 // => { foo: {} }
 ```
 
-You can see above that when we delete the value of `'foo.bar'`, the value for `'foo'` has been deleted and replaced with an empty object. Note here that deleteting a key will not set it to `null`.
-
 
 ***
 
 
-### `settings.canQuitSafely()`
+watch()
+-------
 
-Returns a boolean indicating whether or not the user can quit safely or not. Part of what makes electron-settings fast is its caching layer and lazy interaction with the file system, but as a result special precautions need to be taken to ensure that data is not lost or corrupted if the app quits in the middle of a save or before a queued save request has been fulfilled. When the app will quit, ensure that it can in fact quit safely before quitting.
+**`settings.watch(keyPath, handler)`**
 
-Take a look at the following scenarios:
+Watches a key path and calls the handler function when it is changed. You may user [minimatch](external_package_minimatch) to watch dynamic key paths, like `"foo.*"`.
 
-```js
-settings.set('foo', 'bar');
+**Arguments**
 
-console.log(settings.canQuitSafely());
-// => false
+  * **`keyPath`** *String* - The key path or pattern to watch we wish to watch.
+  * **`handler`** *Function* - The function to call when the observed key path has changed. Returns:
+    * `event` *String* - The type of change that has occured. Either `"create"`, `"change"`, or `"delete"`
+    * `keyPath` *String* - The key path that was changed.
+    * `value` *Any* - The new value of this setting, if applicable.
 
-app.quit();
-```
+**Examples**
 
-In the above example, the data that was just set is lost, because the app quit before it had a chance to save to disk. We can ensure that this does not happen by using the `canQuitSafely` method in conjunction with the `'can-quit-safely'` event:
-
-```js
-settings.set('foo', 'bar');
-
-// When the app is about to quit, check that we can quit
-// the app safely without losing any data. If we cannot,
-// prevent the app from quitting, wait for the next
-// "can-quit-safely" event, then quit the app.
-app.on('will-quit', event => {
-  if (!settings.canQuitSafely()) {
-    event.preventDefault();
-
-    settings.once('can-quit-safely', () => {
-      app.quit();
-    });
-  }
-});
-
-app.quit();
-```
-
-Additionally, all methods that send save requests also return promises that resolve once the settings cache is saved.
-
-```js
-settings.set('foo', 'bar').then(() => {
-  console.log(settings.canQuitSafely());
-  // => true
-})
-
-console.log(settings.canQuitSafely());
-// => false;
-```
-
-
-***
-
-
-### `settings.defaults(obj[, callback])`
-
-* **`obj`** *Object* - The object that will be extended by the current settings object.
-* **`callback`** *Function* (optional) - Invoked when the settings cache containing these changes have been saved to disk.
-
-Extends the current settings object, ensuring that all keys present within the defaults object exist in the settings object. Take the following for example:
-
-**settings.json**
-Given:
+Given
 ```json
-{
-  "foo": "bar"
-}
+  {
+    foo: 'bar'
+  }
 ```
 
-**main.js**
-
-Apply default settings.
+Watches a key path and calls the handler function when it is changed.
 ```js
-settings.defaults({
-  foo: 'qux',
-  snap: 'crackle'
+settings.watch('foo', (event, keyPath, newValue) => {
+  console.log(newValue); // => 'baz'
 });
 
-settings.get();
-// => { foo: 'bar', snap: 'crackle' }
+settings.set('foo', 'baz');
 ```
 
+Watches a dynamic key path. In this example, we are watching any key path that ends with `".bar"`or `".baz"`.
+```js
+settings.watch('*.+(bar|baz)', (event, keyPath, newValue) => {
+  console.log(newValue);
+});
+
+settings.set('foo.bar', 'baz'); // watched
+settings.set('baz.bar', 'qux'); // watched
+settings.set('qux.baz', 'zap'); // watched
+settings.set('zap.qux', 'norf'); // not watched
+```
 
 
 ***
 
-<small>Last updated Jul. 15th, 2016, by [Nathan Buchar]</small>
+
+unwatch()
+---------
+
+**`settings.unwatch(keyPath[, handler])`**
+
+Unwatches a key path. Note: the key path or pattern *must be the same* as that chosen when you set up the watcher otherwise it will not unbind. For example, if you watch `"foo.bar.*"`, you must unwatch with `"foo.bar.*"`.
+
+**Arguments**
+
+  * **`keyPath`** *String* - The key path or pattern to unwatch.
+  * **`handler`** *Function* (optional) - The function to call when the observed key path has changed. If not provided, all key path watchers matching the given key path are removed.
+
+
+***
+
+
+getConfigFilePath()
+-------------------
+
+**`settings.getConfigFilePath():string`**
+
+Returns the path to the config file. Typically found in your application's user data directory.
+
+**Example**
+
+```js
+settings.getConfigFilePath();
+// => /Users/Tobias-Funke/Library/Application Support/
+```
+
+***
+
+
+<small>Last updated Jul. 18th, 2016, by [Nathan Buchar]</small>
 
 
 
@@ -240,10 +303,13 @@ settings.get();
 
 [Nathan Buchar]: (mailto:hello@nathanbuchar.com)
 
-[method_has]: #settingshaskeypath
-[method_get]: #settingsgetkeypath
-[method_set]: #settingssetkeypath-value-callback
-[method_delete]: #settingsdeletekeypath-callback
-[method_defaults]: #settingsdefaultsobj-callback
-[method_canQuitSafely]: #settingscanquitsafely
-[method_getPathToConfigFile]: #settingsgetpathtoconfigfile
+[method_has]: #has
+[method_get]: #get
+[method_set]: #set
+[method_unset]: #unset
+[method_clear]: #clear
+[method_watch]: #watch
+[method_unwatch]: #unwatch
+[method_getconfigfilepath]: #getconfigfilepath
+
+[external_package_minimatch]: https://npmjs.org/package/minimatch

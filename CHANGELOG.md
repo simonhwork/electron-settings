@@ -8,38 +8,37 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 2.0.0 - UNRELEASED
 ------------------
 * Adds `has()` method to check if a key exists.
-* Adds `defaults()` method to apply defaults to settings.
-* Adds `canQuitSafely()` method to check if it is safe to quit the application.
-* Adds `saveImmediately` option to `set()`, `unset()`, `clear()`, and `defaults()` to save the file without a debounce delay.
-* Adds `FSWatcher` support for file change events using the `change` listener.
-* Adds `can-quite-safely` event.
-* Adds automatic migration from v1 to v2 for most users.
+* Adds `FSWatcher` support to wathc for file change events to update the settings file even if electron-settings did not modify it.
 * Adds troubleshooting guide.
 * Adds migration guide.
-* Replaces `getConfigFilePath()` with `getPathToSettingsFile()`.
-* Removes the `created` event as there is no way to listen for this event because the event is only called during instantiation before a reference to the instance can be obtained.
-* Updates saving to disk so that it is now asynchronous.
+* Adds the ability to set the root object using `set()` by not specifying a key path.
+* Removes the `'created'` event as there is no way to listen for this event because the event is only called during instantiation before a reference to the instance can be obtained.
 * Replaces local key path helpers library Atom's official key-path-helpers package.
-* Removes Lodash as a dependency.
+* Removes Lodash as a dependency :raised_hands:
+* `options.debouncedSaveTime` has been removed.
+* Simplifies how much data key path watchers return. Now no longer returns a massive settings diff object. If you'd like to implement this on your own, check out [`deep-diff`][external_package_deep-diff]. To see how [`watch()`](method_watch) now works, see the [methods guide](docs_methods).
+* Adds extensive testing and support for automatic testing with Travis.
 
 ⚠️ **Breaking Changes**
-* electron-settings no longer needs to be instantiated
-* Instance options have been removed
-* Changes default settings directory from `<user data>/electron-settings` to `<user data>/config`
-* The `change` event is now invoked on file change events signaled by an `FSWatcher` and has no relation to key path watching.
-* Removes support for key path watchers and deprecates the following methods:
-  * `watch()`
-  * `unWatch()`
+
+* Deprecates the following methods:
   * `getWatchers()`
   * `clearWatchers()`
+  * `destroy()`
+* Deprecates the `'error'` event.
+* `set()`, `unset`, and `clear()` will now no longer accept any options object or the `'.'` key path.
+
+[docs_methods]: ./docs/methods.md
+[method_watch]: ./docs/methods.md#watch
+[external_package_deep-diff]: https://npmjs.org/package/deep-diff
 
 1.1.1 - Jul. 12, 2016
 ---------------------
-* Fixes internal `create` event handler bug.
+* Fixes internal `'create'` event handler bug.
 
 1.1.0 - Jul. 11, 2016
 ---------------------
-* Adds support for "change" event.
+* Adds support for `'change'` event.
 * Adds Kai Eichinger as a contributor.
 
 1.0.4 - Apr. 14, 2016

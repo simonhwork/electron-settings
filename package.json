@@ -36,8 +36,7 @@
     "file-exists": "^1.0.0",
     "fs-extra": "^0.26.0",
     "key-path-helpers": "^0.4.0",
-    "minimatch": "^3.0.2",
-    "pathwatcher": "^6.7.0"
+    "minimatch": "^3.0.2"
   },
   "devDependencies": {
     "chai": "^3.5.0",
