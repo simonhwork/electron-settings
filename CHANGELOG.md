@@ -8,25 +8,23 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 2.0.0 - UNRELEASED
 ------------------
 * Adds `has()` method to check if a key exists.
-* Adds `FSWatcher` support to wathc for file change events to update the settings file even if electron-settings did not modify it.
+* Adds `FSWatcher` support to watch for file change events to update the settings file even if electron-settings did not modify it.
 * Adds troubleshooting guide.
 * Adds migration guide.
 * Adds the ability to set the root object using `set()` by not specifying a key path.
-* Removes the `'created'` event as there is no way to listen for this event because the event is only called during instantiation before a reference to the instance can be obtained.
+* Adds extensive testing
+* Adds support for automatic testing with Travis.
 * Replaces local key path helpers library Atom's official key-path-helpers package.
 * Removes Lodash as a dependency :raised_hands:
-* `options.debouncedSaveTime` has been removed.
 * Simplifies how much data key path watchers return. Now no longer returns a massive settings diff object. If you'd like to implement this on your own, check out [`deep-diff`][external_package_deep-diff]. To see how [`watch()`](method_watch) now works, see the [methods guide](docs_methods).
-* Adds extensive testing and support for automatic testing with Travis.
-
-⚠️ **Breaking Changes**
-
-* Deprecates the following methods:
-  * `getWatchers()`
-  * `clearWatchers()`
-  * `destroy()`
-* Deprecates the `'error'` event.
-* `set()`, `unset`, and `clear()` will now no longer accept any options object or the `'.'` key path.
+* Deprecates `options.debouncedSaveTime`.
+* Deprecates `getWatchers()`.
+* Deprecates `clearWatchers()`.
+* Deprecates `destroy()`.
+* Deprecates the `"error"` event.
+* Deprecates the `"created"` event from 1.1.0.
+* Deprecates all options for the `set()`, `unset`, and `clear()` methods.
+* `set()`, `unset`, and `clear()` no longer accept `"."` as a key path.
 
 [docs_methods]: ./docs/methods.md
 [method_watch]: ./docs/methods.md#watch

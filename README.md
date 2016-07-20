@@ -3,8 +3,6 @@ electron-settings
 
 A fast and powerful persistent user settings manager for [Electron][external_electron] adapted from [Atom's own configuration manager][external_atom-config].
 
-Having trouble? [Check the troubleshooting guide][docs_troubleshooting]
-
 Migrating from v1? [Click here][docs_migration-guide]
 
 [![Join the chat at https://gitter.im/nathanbuchar/electron-settings](https://badges.gitter.im/nathanbuchar/electron-settings.svg)](https://gitter.im/nathanbuchar/electron-settings?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
@@ -90,7 +88,6 @@ License
 [Kai Eichinger]: mailto:kai.eichinger@outlook.com
 [Your Name]: mailto:you@email.com
 
-[docs_troubleshooting]: ./docs/troubleshooting.md
 [docs_migration-guide]: ./docs/migration-guide.md
 [docs_events]: ./docs/events.md
 [docs_methods]: ./docs/methods.md

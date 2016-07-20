@@ -108,7 +108,7 @@ Sets the value of the key at the chosen key path. If no key path is provided, th
 **Arguments**
 
   * **`keyPath`** *String* (optional) - The path to the key whose value we wish to set. This key need not already exist.
-  * **`value`** *Any* - The value to set the key and the chosen key path to.
+  * **`value`** *Any* - The value to set the key at the chosen key path to.
 
 **Examples**
 
@@ -116,7 +116,7 @@ Sets the value of the key at the chosen key path. If no key path is provided, th
 {}
 ```
 
-Set the `'user.name'` key path to an object.
+Set the `"user.name"` key path to an object.
 ```js
 settings.set('user.name', {
   first: 'Cosmo',
